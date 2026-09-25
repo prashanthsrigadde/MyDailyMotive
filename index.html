@@ -45,8 +45,37 @@
 <script>
 const KEY='mdm_v2', DEF=[['🌅 Wake up on time','6 AM'],['🚫 No snoozing','0 snoozes'],['💧 Drink water','3 L'],['🏋️ Strength / exercise','20–30 min'],['🧘 Stretching','10 min'],['📚 NEBOSH study','30 min'],['🧘‍♂️ Breath / meditation','10 min'],['📵 Limit social media','Target limit'],['🚫 No alcohol','Today'],['🌙 Sleep routine','Before midnight']];
 function fresh(){return{habits:DEF.map((x,i)=>({id:String(Date.now())+i,name:x[0],target:x[1]})),logs:{}}}
-function load(){try{let x=JSON.parse(localStorage.getItem(KEY)||'null');if(x&&Array.isArray(x.habits)&&x.habits.length)return{x:x.habits,habits:x.habits,logs:x.logs||{}}}catch(e){}return fresh()}
-let d=load(); if(d.x){d.habits=d.x;delete d.x}
+function normalizeHabit(h,i){
+  if(typeof h==='string') return {id:String(Date.now())+i,name:h,target:'Daily'};
+  h=h||{};
+  const name=h.name??h.title??h.label??h.text??h.habit??h.task??h[0]??('Habit '+(i+1));
+  const target=h.target??h.goal??h.value??h.subtitle??h.note??h[1]??'Daily';
+  return {id:String(h.id??(Date.now()+i)),name:String(name),target:String(target)};
+}
+function normalizeLogs(logs){
+  if(!logs || typeof logs!=='object') return {};
+  const out={};
+  Object.keys(logs).forEach(k=>{
+    const v=logs[k];
+    if(Array.isArray(v)){
+      out[k]={};
+      v.forEach((item,i)=>{ if(item===true) out[k][i]=true; });
+    }else if(v && typeof v==='object'){
+      out[k]={...v};
+    }
+  });
+  return out;
+}
+function load(){
+  try{
+    const x=JSON.parse(localStorage.getItem(KEY)||'null');
+    if(x && Array.isArray(x.habits) && x.habits.length){
+      return {habits:x.habits.map(normalizeHabit),logs:normalizeLogs(x.logs)};
+    }
+  }catch(e){}
+  return fresh();
+}
+let d=load();
 function save(){localStorage.setItem(KEY,JSON.stringify(d))}
 function key(dt=new Date()){return dt.toISOString().slice(0,10)}
 function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
@@ -63,7 +92,8 @@ function render(){
  pct.textContent=p+'%';dc.textContent=c+'/'+total;bar.style.width=p+'%';streak.textContent=streak()+' days';sd.textContent=c;sr.textContent=rate(30)+'%';sb.textContent=best();s30.textContent=rate(30)+'%';s7.textContent=rate(7)+'%';sbest.textContent=best();
  habits.innerHTML=d.habits.map((x,i)=>`<div class="habit ${done(k,i)?'done':''}"><button class="check" onclick="toggle(${i})">✓</button><div class="htext" onclick="toggle(${i})"><div class="hname">${esc(x.name)}</div><div class="hmeta">${esc(x.target||'Daily')}</div></div><button class="more" onclick="editHabit(${i})">⋮</button></div>`).join('')||'<div class="empty">No habits yet.</div>';
  let ds=days(30),t='<table><thead><tr><th>Habit</th>'+ds.map(x=>'<th>'+new Date(x+'T12:00:00').getDate()+'</th>').join('')+'</tr></thead><tbody>';
- d.habits.forEach((x,i)=>{t+='<tr><td>'+esc(x.name)+'</td>'+ds.map(k=>'<td><div class="dot '+(done(k,i)?'on':'')+'"></div></td>').join('')+'</tr>'});sheetbox.innerHTML=t+'</tbody></table>';
+ d.habits.forEach((x,i)=>{t+='<tr><td>'+esc(x.name)+'</td>'+ds.map(k=>'<td><div class="dot '+(done(k,i)?'on':'')+'"></div></td>').join('')+'</tr>'});
+ t+='</tbody></table>';sheetbox.innerHTML=t;
  perf.innerHTML=d.habits.map((x,i)=>{let c=ds.filter(k=>done(k,i)).length,p=Math.round(c/30*100);return`<div class="card"><b>${esc(x.name)}</b><p>${c}/30 days completed · ${p}% consistency</p><div class="bar"><i style="width:${p}%"></i></div></div>`}).join('');
  let msg=c===total&&total?'All habits completed today. Great work.':c?`${c} of ${total} habits are complete today. Keep the momentum going.`:'Start with one habit today. Small actions build consistency.';
  ins.innerHTML=`<div class="card"><b>Today's momentum</b><p>${msg}</p></div><div class="card"><b>30-day consistency</b><p>Your current 30-day completion rate is ${rate(30)}%.</p></div><div class="card"><b>Streak</b><p>Your current streak is ${streak()} day${streak()===1?'':'s'}.</p></div>`;
