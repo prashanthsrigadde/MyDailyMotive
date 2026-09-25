@@ -48,7 +48,9 @@ function fresh(){return{habits:DEF.map((x,i)=>({id:String(Date.now())+i,name:x[0
 function normalizeHabit(h,i){
   if(typeof h==='string') return {id:String(Date.now())+i,name:h,target:'Daily'};
   h=h||{};
-  const name=h.name??h.title??h.label??h.text??h.habit??h.task??h[0]??('Habit '+(i+1));
+  const candidates=Object.keys(h).filter(k=>!['id','target','goal','value','subtitle','note','createdAt','updatedAt'].includes(k));
+  const fallbackName=candidates.map(k=>h[k]).find(v=>typeof v==='string'&&v.trim());
+  const name=h.name??h.title??h.label??h.text??h.habit??h.task??fallbackName??h[0]??('Habit '+(i+1));
   const target=h.target??h.goal??h.value??h.subtitle??h.note??h[1]??'Daily';
   return {id:String(h.id??(Date.now()+i)),name:String(name),target:String(target)};
 }
@@ -76,7 +78,15 @@ function load(){
   return fresh();
 }
 let d=load();
-function save(){localStorage.setItem(KEY,JSON.stringify(d))}
+d.habits=d.habits.map((h,i)=>{
+  if(!h || !String(h.name||'').trim() || String(h.name).toLowerCase()==='undefined'){
+    const def=DEF[i];
+    return {id:String(h?.id??(Date.now()+i)),name:def?def[0]:'Habit '+(i+1),target:String(h?.target??def?.[1]??'Daily')};
+  }
+  return h;
+});
+function save(){localStorage.setItem(KEY,JSON.stringify(d));}
+save();
 function key(dt=new Date()){return dt.toISOString().slice(0,10)}
 function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 function done(k,i){return!!(d.logs[k]&&d.logs[k][i])}
