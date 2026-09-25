@@ -48,9 +48,18 @@ function fresh(){return{habits:DEF.map((x,i)=>({id:String(Date.now())+i,name:x[0
 function normalizeHabit(h,i){
   if(typeof h==='string') return {id:String(Date.now())+i,name:h,target:'Daily'};
   h=h||{};
-  const candidates=Object.keys(h).filter(k=>!['id','target','goal','value','subtitle','note','createdAt','updatedAt'].includes(k));
-  const fallbackName=candidates.map(k=>h[k]).find(v=>typeof v==='string'&&v.trim());
-  const name=h.name??h.title??h.label??h.text??h.habit??h.task??fallbackName??h[0]??('Habit '+(i+1));
+  const emojiOnly=v=>typeof v==='string' && /^[\s\p{Extended_Pictographic}\uFE0F\u200D]+$/u.test(v.trim());
+  const titleCandidate=[h.title,h.label,h.text,h.habit,h.task,h.description].find(v=>typeof v==='string'&&v.trim());
+  let name=h.name;
+  if(!name || String(name).toLowerCase()==='undefined' || emojiOnly(name)){
+    name=titleCandidate;
+  }
+  if(!name){
+    const candidates=Object.keys(h)
+      .filter(k=>!['id','name','target','goal','value','subtitle','note','createdAt','updatedAt','title','label','text','habit','task','description'].includes(k));
+    name=candidates.map(k=>h[k]).find(v=>typeof v==='string'&&v.trim());
+  }
+  if(!name) name=h[0]??('Habit '+(i+1));
   const target=h.target??h.goal??h.value??h.subtitle??h.note??h[1]??'Daily';
   return {id:String(h.id??(Date.now()+i)),name:String(name),target:String(target)};
 }
@@ -79,8 +88,9 @@ function load(){
 }
 let d=load();
 d.habits=d.habits.map((h,i)=>{
-  if(!h || !String(h.name||'').trim() || String(h.name).toLowerCase()==='undefined'){
-    const def=DEF[i];
+  const def=DEF[i];
+  const emojiOnly=typeof h?.name==='string' && /^[\s\p{Extended_Pictographic}\uFE0F\u200D]+$/u.test(h.name.trim());
+  if(!h || !String(h.name||'').trim() || String(h.name).toLowerCase()==='undefined' || emojiOnly){
     return {id:String(h?.id??(Date.now()+i)),name:def?def[0]:'Habit '+(i+1),target:String(h?.target??def?.[1]??'Daily')};
   }
   return h;
