@@ -1,11 +1,11 @@
 {
   "name": "My Daily Motive",
   "short_name": "Daily Motive",
-  "start_url": "./",
+  "start_url": "./?v=35",
   "display": "standalone",
   "background_color": "#07100d",
   "theme_color": "#07100d",
-  "description": "Better habits, bigger you. V3.4",
+  "description": "Better habits, bigger you. V3.5",
   "icons": [
     {
       "src": "icon-192.png",

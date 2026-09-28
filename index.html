@@ -40,8 +40,8 @@
 <section id="insights" class="view"><div class="head"><div class="title">Insights</div></div><div class="cards" id="ins"></div></section>
 </div>
 <nav class="bottom"><button class="nav active" data-v="home" onclick="view('home')"><span>⌂</span>Home</button><button class="nav" data-v="sheet" onclick="view('sheet')"><span>☷</span>Habit Sheet</button><button class="nav" data-v="stats" onclick="view('stats')"><span>◒</span>Stats</button><button class="nav" data-v="insights" onclick="view('insights')"><span>✦</span>Insights</button></nav>
-<div class="modal" id="modal"><div class="modalcard"><h3 id="mt">Add habit</h3><div class="field"><label>Habit name</label><input id="hn" maxlength="50" placeholder="e.g. Read 20 minutes"></div><div class="field"><label>Target / note</label><input id="ht" maxlength="50" placeholder="e.g. 20 min"></div><div class="actions"><button onclick="closeModal()">Cancel</button><button class="primary" onclick="saveHabit()">Save</button></div></div></div>
-<div class="modal" id="set"><div class="modalcard"><h3>Settings</h3><div class="card"><b>My Daily Motive V3</b><p>Your habits and history stay on this device. The app works offline.</p></div><div class="actions"><button onclick="document.getElementById('set').classList.remove('show')">Close</button><button class="danger" onclick="resetAll()">Reset all data</button></div></div></div><div class="toast" id="toast"></div>
+<div class="modal" id="modal"><div class="modalcard"><h3 id="mt">Add habit</h3><div class="field"><label>Habit name</label><input id="hn" maxlength="50" placeholder="e.g. Read 20 minutes"></div><div class="field"><label>Target / note</label><input id="ht" maxlength="50" placeholder="e.g. 20 min"></div><div class="actions"><button onclick="closeModal()">Cancel</button><button id="removeBtn" class="danger" style="display:none" onclick="removeHabit()">Remove</button><button class="primary" onclick="saveHabit()">Save</button></div></div></div>
+<div class="modal" id="set"><div class="modalcard"><h3>Settings</h3><div class="card"><b>My Daily Motive V3.5</b><p>Your habits and history stay on this device. The app works offline.</p></div><div class="actions"><button onclick="document.getElementById('set').classList.remove('show')">Close</button><button class="danger" onclick="resetAll()">Reset all data</button></div></div></div><div class="toast" id="toast"></div>
 <script>
 const KEY='mdm_v2', DEF=[['🌅 Wake up on time','6 AM'],['🚫 No snoozing','0 snoozes'],['💧 Drink water','3 L'],['🏋️ Strength / exercise','20–30 min'],['🧘 Stretching','10 min'],['📚 NEBOSH study','30 min'],['🧘‍♂️ Breath / meditation','10 min'],['📵 Limit social media','Target limit'],['🚫 No alcohol','Today'],['🌙 Sleep routine','Before midnight']];
 function fresh(){return{habits:DEF.map((x,i)=>({id:String(Date.now())+i,name:x[0],target:x[1]})),logs:{}}}
@@ -119,13 +119,47 @@ function render(){
  ins.innerHTML=`<div class="card"><b>Today's momentum</b><p>${msg}</p></div><div class="card"><b>30-day consistency</b><p>Your current 30-day completion rate is ${rate(30)}%.</p></div><div class="card"><b>Streak</b><p>Your current streak is ${streak()} day${streak()===1?'':'s'}.</p></div>`;
 }
 function view(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById(v).classList.add('active');document.querySelectorAll('.nav').forEach(x=>x.classList.toggle('active',x.dataset.v===v));scrollTo({top:0,behavior:'smooth'})}
-let edit=-1;function addHabit(){edit=-1;mt.textContent='Add habit';hn.value='';ht.value='';modal.classList.add('show');hn.focus()}
-function editHabit(i){edit=i;mt.textContent='Edit habit';hn.value=d.habits[i].name;ht.value=d.habits[i].target||'';modal.classList.add('show');hn.focus()}
+let edit=-1;
+function addHabit(){
+  edit=-1;
+  mt.textContent='Add habit';hn.value='';ht.value='';
+  document.getElementById('removeBtn').style.display='none';
+  modal.classList.add('show');hn.focus();
+}
+function editHabit(i){
+  edit=i;
+  mt.textContent='Edit habit';hn.value=d.habits[i].name;ht.value=d.habits[i].target||'';
+  document.getElementById('removeBtn').style.display='block';
+  modal.classList.add('show');hn.focus();
+}
 function closeModal(){modal.classList.remove('show')}
-function saveHabit(){let n=hn.value.trim(),t=ht.value.trim();if(!n){toast('Enter a habit name');return}if(edit<0)d.habits.push({id:String(Date.now()),name:n,target:t});else d.habits[edit]={...d.habits[edit],name:n,target:t};save();closeModal();render();toast('Habit saved ✓')}
+function saveHabit(){
+  let n=hn.value.trim(),t=ht.value.trim();
+  if(!n){toast('Enter a habit name');return}
+  if(edit<0)d.habits.push({id:String(Date.now()),name:n,target:t});
+  else d.habits[edit]={...d.habits[edit],name:n,target:t};
+  save();closeModal();render();toast('Habit saved ✓');
+}
+function removeHabit(){
+  if(edit<0 || !d.habits[edit]) return;
+  const name=d.habits[edit].name;
+  if(!confirm('Remove "'+name+'"? Its completion history will also be removed.')) return;
+  const removed=edit;
+  d.habits.splice(removed,1);
+  Object.keys(d.logs||{}).forEach(day=>{
+    const old=d.logs[day]||{}, next={};
+    Object.keys(old).forEach(k=>{
+      const idx=Number(k);
+      if(!Number.isNaN(idx) && idx<removed) next[idx]=old[k];
+      else if(!Number.isNaN(idx) && idx>removed) next[idx-1]=old[k];
+    });
+    d.logs[day]=next;
+  });
+  save();edit=-1;closeModal();render();toast('Habit removed');
+}
 function settings(){set.classList.add('show')}
 function resetAll(){if(confirm('Reset all habits and history on this device?')){d=fresh();save();set.classList.remove('show');render();toast('Data reset')}}
 function toast(s){let x=document.getElementById('toast');x.textContent=s;x.classList.add('show');clearTimeout(window.tt);window.tt=setTimeout(()=>x.classList.remove('show'),1600)}
-render();if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+render();if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=35',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{}));
 </script>
 </body></html>
