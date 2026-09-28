@@ -1,21 +1,25 @@
 {
   "name": "My Daily Motive",
   "short_name": "Daily Motive",
-  "start_url": "./?v=35",
+  "id": "./?app=final2026",
+  "start_url": "./?app=final2026",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#07100d",
-  "theme_color": "#07100d",
-  "description": "Better habits, bigger you. V3.5",
+  "background_color": "#f7faf8",
+  "theme_color": "#ffffff",
+  "description": "Better Habits \u2022 Bigger You",
   "icons": [
     {
       "src": "icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
