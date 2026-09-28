@@ -1,6 +1,6 @@
 {
   "name": "My Daily Motive",
-  "short_name": "Daily Motive",
+  "short_name": "MDM",
   "id": "./?app=final2026",
   "start_url": "./?app=final2026",
   "scope": "./",
