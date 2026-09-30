@@ -1,13 +1,13 @@
 {
-  "name": "My Daily Motive",
+  "name": "MDM — My Daily Motive",
   "short_name": "MDM",
-  "id": "./?app=final2026",
-  "start_url": "./?app=final2026",
+  "id": "./?app=mdm",
+  "start_url": "./?v=mdm-final-complete-2",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f7faf8",
   "theme_color": "#ffffff",
-  "description": "Better Habits \u2022 Bigger You",
+  "description": "MDM — Better Habits • Bigger You",
   "icons": [
     {
       "src": "icon-192.png",
