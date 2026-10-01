@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#ffffff">
 <meta name="description" content="My Daily Motive — Better Habits • Bigger You">
 <link rel="manifest" href="manifest.json?v=final">
-<title>My Daily Motive</title>
+<title>MDM</title>
 <style>
 :root{
   --bg:#f7faf8;--card:#fff;--text:#13201c;--muted:#728079;--line:#dce7e1;
@@ -72,19 +72,38 @@ th:first-child{background:#159c68}td:first-child{background:#fff;font-weight:750
 .insight{background:#fff;border:1px solid var(--line);border-radius:17px;padding:15px;margin:9px 0;box-shadow:var(--shadow)}
 .insight.good{background:#effaf4;border-color:#ccebdc}.insight b{font-size:13px}.insight p{margin:6px 0 0;color:#61716a;font-size:11px;line-height:1.45}
 .mquote{background:linear-gradient(135deg,#f4faf7,#eef8ff);border:1px solid #dbece4;padding:17px;border-radius:17px;font-size:14px;font-weight:800;line-height:1.45}
-.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:max(9px,env(safe-area-inset-bottom));width:min(720px,calc(100% - 24px));background:rgba(255,255,255,.97);backdrop-filter:blur(15px);border:1px solid var(--line);border-radius:20px;padding:6px;display:grid;grid-template-columns:repeat(4,1fr);z-index:30;box-shadow:0 10px 35px rgba(19,32,28,.12)}
+.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:max(9px,env(safe-area-inset-bottom));width:min(720px,calc(100% - 24px));background:rgba(255,255,255,.97);backdrop-filter:blur(15px);border:1px solid var(--line);border-radius:20px;padding:6px;display:grid;grid-template-columns:repeat(5,1fr);z-index:30;box-shadow:0 10px 35px rgba(19,32,28,.12)}
 .nav button{border:0;background:transparent;color:#7b8983;padding:7px 2px;border-radius:13px;font-size:9px;font-weight:750}.nav button span{display:block;font-size:19px;margin-bottom:3px}.nav button.active{background:#e8f8f0;color:var(--green)}
 .modal{position:fixed;inset:0;background:rgba(12,25,20,.42);display:none;align-items:flex-end;z-index:60}.modal.show{display:flex}.modalCard{width:min(720px,100%);background:#fff;border-radius:23px 23px 0 0;padding:19px;box-shadow:0 -10px 40px rgba(0,0,0,.15)}.modalCard h3{margin:0 0 12px}.field{margin:9px 0}.field label{display:block;font-size:10px;color:var(--muted);margin-bottom:5px}.field input{width:100%;border:1px solid var(--line);border-radius:12px;padding:11px;background:#fbfdfc;color:var(--text)}.actions{display:flex;gap:8px;margin-top:14px}.actions button{flex:1;padding:11px;border-radius:12px;border:1px solid var(--line);background:#f5f8f6;font-weight:800}.actions .primary{background:var(--green);border-color:var(--green);color:#fff}.actions .danger{color:#d9535f;background:#fff5f5;border-color:#f2c5c8}
 .toast{position:fixed;left:50%;transform:translateX(-50%) translateY(20px);bottom:92px;background:#17231f;color:#fff;padding:9px 14px;border-radius:99px;font-size:11px;opacity:0;transition:.25s;z-index:70}.toast.show{opacity:1;transform:translateX(-50%)}
 .splash{position:fixed;inset:0;background:linear-gradient(145deg,#f4eee1,#d9e6e8 45%,#8aa19a);display:grid;place-items:center;z-index:100;transition:opacity .45s,visibility .45s}.splash.hide{opacity:0;visibility:hidden;pointer-events:none}.splashInner{text-align:center;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.25)}.splashLogo{width:165px;height:165px;object-fit:cover;border-radius:35px;box-shadow:0 15px 45px rgba(0,0,0,.25)}.splashName{font-size:29px;font-weight:850;margin-top:18px}.splashSub{font-size:14px;margin-top:6px;letter-spacing:.4px}.dots{margin-top:30px}.dots i{display:inline-block;width:7px;height:7px;border-radius:50%;background:#fff;opacity:.5;margin:0 3px}.dots i:first-child{background:#18a96d;opacity:1;width:23px;border-radius:99px}
 @media(max-width:430px){.app{padding-left:14px;padding-right:14px}.quoteText{font-size:19px}.pageTitle{font-size:18px}.stat b{font-size:21px}.hname{font-size:12px}}
 </style>
+
+<style>
+.targetsSummary{display:flex;gap:8px;margin-top:14px}
+.targetStat{flex:1;border:1px solid var(--line);border-radius:16px;padding:12px;text-align:center;background:rgba(255,255,255,.02)}
+.targetStat b{display:block;font-size:20px}.targetStat span{font-size:10px;color:var(--muted)}
+.targetList{display:grid;gap:10px}
+.targetItem{display:grid;grid-template-columns:24px 42px 1fr 34px 28px;align-items:center;gap:8px;border:1px solid var(--line);border-radius:18px;padding:11px;background:var(--card)}
+.targetItem.done{border-color:var(--green)}
+.targetItem.done .targetName{text-decoration:line-through;opacity:.6}
+.targetIcon{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:#edf6f1;font-size:20px}
+.targetName{font-weight:850;font-size:15px}.targetMeta{font-size:11px;color:var(--muted);margin-top:3px}
+.targetCheck{width:32px;height:32px;border-radius:10px;border:1px solid var(--line);background:transparent;font-weight:900}
+.targetItem.done .targetCheck{background:var(--green);color:#fff;border-color:var(--green)}
+.targetMore{border:0;background:transparent;color:#8b9892;font-size:21px}
+.dragHandle{border:0;background:transparent;color:#8b9892;font-size:18px;cursor:grab;padding:0}
+.targetItem.dragging{opacity:.45}.targetItem.dragOver{border-color:var(--green)}
+.reorderRow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
+.reorderRow button{padding:9px;border:1px solid var(--line);background:var(--card);border-radius:11px;font-weight:800}
+</style>
 </head>
 <body>
 <div class="splash" id="splash"><div class="splashInner"><img class="splashLogo" src="icon-512.png"><div class="splashName">My Daily Motive</div><div class="splashSub">Better Habits • Bigger You</div><div class="dots"><i></i><i></i><i></i></div></div></div>
 
 <div class="app">
-<header><div class="brand">My Daily <span>Motive</span></div><button class="iconbtn" onclick="openSettings()">⚙️</button></header>
+<header><div class="brand">MDM</div><button class="iconbtn" onclick="openSettings()">⚙️</button></header>
 
 <section id="home" class="view active">
 <div class="quoteCard"><div class="eyebrow">TODAY'S QUOTE</div><div class="quoteText" id="topQuote"></div></div>
@@ -123,19 +142,62 @@ th:first-child{background:#159c68}td:first-child{background:#fff;font-weight:750
 </section>
 </div>
 
+
+<section id="targets" class="view">
+  <div class="statsHead">
+    <button class="back" onclick="view('home')">‹</button>
+    <div class="pageTitle">Daily Targets</div>
+    <button class="pillBtn" onclick="addTarget()">+ Add</button>
+  </div>
+
+  <div class="quoteCard" style="min-height:100px;margin-top:12px">
+    <div class="eyebrow">TODAY'S TARGETS</div>
+    <div class="quoteText" style="font-size:18px">Small actions. Clear targets. Better days.</div>
+  </div>
+
+  <div class="targetsSummary">
+    <div class="targetStat"><b id="targetDoneCount">0</b><span>Completed</span></div>
+    <div class="targetStat"><b id="targetTotalCount">0</b><span>Targets</span></div>
+    <div class="targetStat"><b id="targetPercent">0%</b><span>Progress</span></div>
+  </div>
+
+  <div class="sectionTitle" style="margin:18px 2px 9px">Today's Activities</div>
+  <div id="targetList" class="targetList"></div>
+</section>
+
 <nav class="nav">
 <button class="active" data-v="home" onclick="view('home')"><span>⌂</span>Home</button>
 <button data-v="sheet" onclick="view('sheet')"><span>▦</span>Habit Sheet</button>
 <button data-v="stats" onclick="view('stats')"><span>♒</span>Stats</button>
 <button data-v="insights" onclick="view('insights')"><span>♢</span>Insights</button>
+<button data-v="targets" onclick="view('targets')"><span>✓</span>Targets</button>
 </nav>
 
-<div class="modal" id="habitModal"><div class="modalCard"><h3 id="modalTitle">Add habit</h3><div class="field"><label>Habit name</label><input id="habitName" maxlength="50" placeholder="e.g. Read 20 minutes"></div><div class="field"><label>Goal</label><input id="habitGoal" maxlength="50" placeholder="e.g. 20 minutes"></div><div class="actions"><button onclick="closeHabitModal()">Cancel</button><button id="removeBtn" class="danger" style="display:none" onclick="removeHabit()">Remove</button><button class="primary" onclick="saveHabit()">Save</button></div></div></div>
+<div class="modal" id="habitModal"><div class="modalCard"><h3 id="modalTitle">Add habit</h3><div class="field"><label>Habit name</label><input id="habitName" maxlength="50" placeholder="e.g. Read 20 minutes"></div><div class="field"><label>Goal</label><input id="habitGoal" maxlength="50" placeholder="e.g. 20 minutes"></div><div id="reorderControls" class="reorderRow" style="display:none"><button type="button" onclick="moveHabit(-1)">↑ Move Up</button><button type="button" onclick="moveHabit(1)">↓ Move Down</button></div><div class="actions"><button onclick="closeHabitModal()">Cancel</button><button id="removeBtn" class="danger" style="display:none" onclick="removeHabit()">Remove</button><button class="primary" onclick="saveHabit()">Save</button></div></div></div>
 
 <div class="modal" id="settingsModal"><div class="modalCard"><h3>Settings</h3><div class="insight"><b>My Daily Motive — Final</b><p>Stable reference design. Your habits and progress stay on this device.</p></div><div class="actions"><button onclick="closeSettings()">Close</button><button onclick="resetFinal()">Reset data</button></div></div></div>
 <div class="toast" id="toast"></div>
 
 <script>
+function autoHabitIcon(name){
+ const n=(name||'').toLowerCase();
+ if(/water|drink|hydrate|glass|bottle/.test(n)) return '💧';
+ if(/exercise|workout|gym|fitness|strength|run|walk|stretch|yoga/.test(n)) return '🏋️';
+ if(/read|book|study|learn|nebosh/.test(n)) return '📖';
+ if(/meditat|breath|mindful|pray/.test(n)) return '🧘';
+ if(/sleep|bed|rest|night/.test(n)) return '🌙';
+ if(/wake|morning|sunrise/.test(n)) return '🌅';
+ if(/alcohol|beer|wine|liquor/.test(n)) return '🚫';
+ if(/smoke|smoking|cigarette/.test(n)) return '🚭';
+ if(/phone|social|screen/.test(n)) return '📵';
+ if(/food|diet|meal|fruit/.test(n)) return '🍎';
+ if(/plan|write|journal|todo/.test(n)) return '📝';
+ if(/work|job|office/.test(n)) return '💼';
+ if(/money|save|budget/.test(n)) return '💰';
+ return '🎯';
+}
+
+
 const KEY='my_daily_motive_final_2026';
 const DEFAULTS=[
  {emoji:'💧',name:'Drink Water',goal:'Goal: 8 glasses'},
@@ -279,23 +341,35 @@ function view(v){
  document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.v===v));
  window.scrollTo({top:0,behavior:'smooth'});
  render();
+ if(v==='targets') renderTargets();
 }
 let edit=-1;
 function addHabit(){
  edit=-1;modalTitle.textContent='Add habit';habitName.value='';habitGoal.value='';
-removeBtn.style.display='none';habitModal.classList.add('show');habitName.focus();
+ removeBtn.style.display='none';
+ const rc=document.getElementById('reorderControls');if(rc)rc.style.display='none';
+ habitModal.classList.add('show');habitName.focus();
 }
 function editHabit(i){
  edit=i;modalTitle.textContent='Edit habit';habitName.value=d.habits[i].name;habitGoal.value=d.habits[i].goal||'';
-removeBtn.style.display='block';habitModal.classList.add('show');habitName.focus();
+ removeBtn.style.display='block';
+ const rc=document.getElementById('reorderControls');if(rc)rc.style.display='grid';
+ habitModal.classList.add('show');habitName.focus();
 }
 function closeHabitModal(){habitModal.classList.remove('show')}
 function saveHabit(){
  const name=habitName.value.trim(),goal=habitGoal.value.trim();
  if(!name){toast('Enter a habit name');return}
- if(edit<0)d.habits.push({id:'custom-'+Date.now(),emoji:'✓',name,goal:goal||'Daily'});
- else d.habits[edit]={...d.habits[edit],name,goal:goal||'Daily'};
+ if(edit<0)d.habits.push({id:'custom-'+Date.now(),emoji:autoHabitIcon(name),name,goal:goal||'Daily'});
+ else d.habits[edit]={...d.habits[edit],emoji:autoHabitIcon(name),name,goal:goal||'Daily'};
  save();closeHabitModal();render();toast('Habit saved ✓');
+}
+function moveHabit(dir){
+ if(edit<0 || !d.habits[edit]) return;
+ const to=edit+dir;
+ if(to<0 || to>=d.habits.length){toast('Already at this position');return}
+ const tmp=d.habits[edit];d.habits[edit]=d.habits[to];d.habits[to]=tmp;
+ save();render();editHabit(to);toast('Habit order updated ✓');
 }
 function removeHabit(){
  if(edit<0||!d.habits[edit])return;
@@ -324,9 +398,94 @@ function toast(s){
  const x=document.getElementById('toast');x.textContent=s;x.classList.add('show');
  clearTimeout(window.__toast);window.__toast=setTimeout(()=>x.classList.remove('show'),1700);
 }
+
+const TARGET_KEY='mdm_daily_targets_v1';
+let dailyTargets=[];
+try{
+ const saved=JSON.parse(localStorage.getItem(TARGET_KEY)||'null');
+ dailyTargets=Array.isArray(saved)?saved:[];
+}catch(e){dailyTargets=[]}
+
+function saveTargets(){localStorage.setItem(TARGET_KEY,JSON.stringify(dailyTargets))}
+function targetDate(){return new Date().toISOString().slice(0,10)}
+function targetIcon(name){
+ const n=(name||'').toLowerCase();
+ if(/water|drink|hydrate|glass/.test(n))return'💧';
+ if(/exercise|workout|gym|run|walk|move|fitness|stretch|yoga/.test(n))return'🏃';
+ if(/read|book|study|learn/.test(n))return'📖';
+ if(/meditat|breath|mindful|pray/.test(n))return'🧘';
+ if(/sleep|bed|rest/.test(n))return'🌙';
+ if(/plan|write|journal|todo/.test(n))return'📝';
+ if(/work|job|office/.test(n))return'💼';
+ if(/money|save|budget/.test(n))return'💰';
+ if(/phone|social|screen/.test(n))return'📵';
+ return'🎯';
+}
+function targetDone(t){return t.completedDate===targetDate()}
+function renderTargets(){
+ const el=document.getElementById('targetList');if(!el)return;
+ let done=0;
+ if(!dailyTargets.length){
+   el.innerHTML='<div class="insight" style="text-align:center"><b>No daily targets yet</b><p>Tap + Add to create your first activity.</p></div>';
+ }else{
+   el.innerHTML=dailyTargets.map((t,i)=>{
+     const yes=targetDone(t);if(yes)done++;
+     return `<div class="targetItem ${yes?'done':''}" draggable="true"
+       ondragstart="targetDragStart(event,${i})" ondragover="targetDragOver(event)" ondragleave="targetDragLeave(event)" ondrop="targetDrop(event,${i})" ondragend="targetDragEnd(event)">
+       <button class="dragHandle" title="Drag to reorder">☷</button>
+       <div class="targetIcon">${esc(t.emoji||targetIcon(t.name))}</div>
+       <div><div class="targetName">${esc(t.name)}</div><div class="targetMeta">${esc(t.goal||'Today')}</div></div>
+       <button class="targetCheck" onclick="toggleTarget(${i})">${yes?'✓':''}</button>
+       <button class="targetMore" onclick="editTarget(${i})">⋮</button>
+     </div>`;
+   }).join('');
+ }
+ document.getElementById('targetDoneCount').textContent=done;
+ document.getElementById('targetTotalCount').textContent=dailyTargets.length;
+ document.getElementById('targetPercent').textContent=(dailyTargets.length?Math.round(done/dailyTargets.length*100):0)+'%';
+}
+function addTarget(){
+ const name=prompt('Daily target / activity name:','');
+ if(name===null)return;
+ const n=name.trim();if(!n)return;
+ const goal=prompt('Goal / duration (optional):','Today')||'Today';
+ dailyTargets.push({id:'t-'+Date.now(),name:n,goal,emoji:targetIcon(n),completedDate:''});
+ saveTargets();renderTargets();toast('Daily target added ✓');
+}
+function toggleTarget(i){
+ const t=dailyTargets[i];if(!t)return;
+ t.completedDate=targetDone(t)?'':targetDate();
+ saveTargets();renderTargets();toast(t.completedDate?'Target completed ✓':'Target unchecked');
+}
+function editTarget(i){
+ const t=dailyTargets[i];if(!t)return;
+ const name=prompt('Edit target name:',t.name);if(name===null)return;
+ if(!name.trim())return;
+ const goal=prompt('Edit goal / duration:',t.goal||'Today');if(goal===null)return;
+ const action=prompt('Type SAVE to save, or REMOVE to remove:', 'SAVE');
+ if((action||'').toUpperCase()==='REMOVE'){
+   dailyTargets.splice(i,1);saveTargets();renderTargets();toast('Target removed');return;
+ }
+ t.name=name.trim();t.goal=goal||'Today';t.emoji=targetIcon(t.name);
+ saveTargets();renderTargets();toast('Target updated ✓');
+}
+let targetDrag=-1;
+function targetDragStart(e,i){targetDrag=i;e.currentTarget.classList.add('dragging')}
+function targetDragOver(e){e.preventDefault();e.currentTarget.classList.add('dragOver')}
+function targetDragLeave(e){e.currentTarget.classList.remove('dragOver')}
+function targetDragEnd(){document.querySelectorAll('.targetItem').forEach(x=>x.classList.remove('dragging','dragOver'));targetDrag=-1}
+function targetDrop(e,i){
+ e.preventDefault();e.currentTarget.classList.remove('dragOver');
+ if(targetDrag<0||targetDrag===i){targetDragEnd();return}
+ const item=dailyTargets.splice(targetDrag,1)[0];
+ dailyTargets.splice(i,0,item);
+ saveTargets();targetDragEnd();renderTargets();toast('Target order updated ✓');
+}
+
 window.addEventListener('load',()=>{
  setTimeout(()=>splash.classList.add('hide'),1400);
  render();
+ renderTargets();
  if('serviceWorker' in navigator){
   navigator.serviceWorker.register('sw.js?v=final2026',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{});
  }
