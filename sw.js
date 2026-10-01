@@ -1,4 +1,4 @@
-const CACHE_NAME='mdm-targets-20261001';
+const CACHE_NAME='mydailymotive-targets-20261001';
 const ASSETS=['./','./index.html','./manifest.json','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',event=>{
   self.skipWaiting();
